@@ -824,7 +824,15 @@
           return roleMatch && stateMatch;
         });
       };
-
+      
+      const formatTime = (time) => {
+        if (!time) return '';
+        const [h, m] = time.split(':').map(Number);
+        const period = h >= 12 ? 'PM' : 'AM';
+        const hour12 = h % 12 || 12;
+        return `${hour12}:${String(m).padStart(2, '0')} ${period}`;
+      };
+      
       const toggleRole = (role) => {
         setSelectedRoles(prev => prev.includes(role) ? prev.filter(r => r !== role) : [...prev, role]);
       };
@@ -972,7 +980,7 @@
                           <div>
                             <div className="card-title">{notice.title}</div>
                             <div className="card-meta" style={{marginTop:'4px'}}>
-                              📅 {notice.date} &nbsp;·&nbsp; 🕐 {notice.time} &nbsp;·&nbsp; 📍 {notice.location}
+                              📅 {notice.date} &nbsp;·&nbsp; 🕐 {formatTime(notice.time)} &nbsp;·&nbsp; 📍 {notice.location}
                             </div>
                           </div>
                         </div>
