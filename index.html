@@ -778,6 +778,7 @@
       const [time, setTime] = useState('10:00');
       const [location, setLocation] = useState('');
       const [description, setDescription] = useState('');
+      const [safeword, setSafeword] = useState('');
       const [sentNotices, setSentNotices] = useState([]);
       const [message, setMessage] = useState('');
       const [allContacts, setAllContacts] = useState([]);
@@ -848,7 +849,7 @@
           const response = await fetch(SCRIPT_URL, {
             method: 'POST',
             headers: { 'Content-Type': 'text/plain;charset=utf-8' },
-            body: JSON.stringify({ action: 'sendNotice', title, date, time, location, description, roles: selectedRoles, states: selectedStates })
+            body: JSON.stringify({ action: 'sendNotice', title, date, time, location, description, roles: selectedRoles, states: selectedStates, safeword })
           });
           const data = await response.json();
           if (data.success) {
@@ -861,7 +862,7 @@
             setSentNotices([notice, ...sentNotices]);
             setMessage({ type: 'success', text: `Meeting notice sent to ${data.recipientCount} recipients. Emails and calendar invites are on their way.` });
             setTitle(''); setDate(''); setTime('10:00'); setLocation('');
-            setDescription(''); setSelectedRoles([]); setSelectedStates([]);
+            setDescription(''); setSelectedRoles([]); setSelectedStates([]); setSafeword('');
             setScreen('dashboard');
             setTimeout(() => setMessage(''), 5000);
           } else {
@@ -1128,6 +1129,20 @@
                   )}
                 </div>
 
+               {/* Send authorization */}
+                <div className="form-section">
+                  <div className="form-section-title">Send authorization</div>
+                  <div className="form-group">
+                    <label className="field-label">Safeword <span className="req">*</span></label>
+                    <input
+                      type="password"
+                      placeholder="Enter the send passphrase"
+                      value={safeword}
+                      onChange={(e) => setSafeword(e.target.value)}
+                    />
+                  </div>
+                </div>
+                
                 {/* Actions */}
                 <div className="btn-row">
                   <button className="btn btn-secondary" onClick={() => {
